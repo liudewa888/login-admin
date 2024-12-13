@@ -21,7 +21,7 @@ app.use((req, res, next) => {
   next();
 });
 // app.use(express.static("./dist"));
-const allowedOrigins = appConfig.allowedOrigins
+const allowedOrigins = appConfig.allowedOrigins;
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -73,7 +73,7 @@ app.post("/login", async (req, res) => {
       if (!err) {
         if (result[0]) {
           const user = result[0];
-          const salt = user.salt || '';
+          const salt = user.salt || "";
           const password = createPassword(data.password.trim() + salt);
           if (user.password !== password) {
             res.send(responseFormat(409, [], "用户名或密码错误"));
@@ -150,6 +150,14 @@ function authenticateToken(req, res, next) {
     });
   });
 }
+
+app.get("/test", (req, res) => {
+  res.set({
+    token: 11,
+    "access-control-expose-headers": "http://localhost:3000",
+  });
+  res.status(302).redirect("/new-path");
+});
 
 app.listen(9060, () => {
   console.log("9060 is running");
